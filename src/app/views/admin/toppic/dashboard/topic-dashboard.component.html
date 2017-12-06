@@ -1,0 +1,187 @@
+<app-token-out (fucEvent)="tokenEvent($event)" [isShow]="isShow" ></app-token-out>
+ <!-- <button (click)="test()" type="button" class="btn btn-default">button</button> -->
+ 
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Quản lý topic
+        </div>
+        <div class="card-body">
+            
+            <div class="col-md-12">
+
+              <button type="button" class="btn btn-primary" (click)="openModal(template)">Thêm Topic mới </button>
+ 
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Thêm Topic mới</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       
+          <form name="form" (ngSubmit)="f.form.valid && addTopic()" #f="ngForm" novalidate >
+              
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
+                  <input class="form-control" name="topicName" [(ngModel)]="addtopic.topicName" #topicName="ngModel" required placeholder="Tên topic" type="text">
+                </div>
+              </div>
+    
+              <div class="form-group has-danger has-feedback">
+                      <label class="form-col-form-label" for="inputError2">Trạng Thái </label>
+                      <label class="switch switch-default switch-pill switch-primary-outline">
+                              <input type="checkbox" name="topicStatut" [checked]="false" [(ngModel)]="addtopic.topicStatut" #topicStatut="ngModel" class="switch-input" checked>
+                              <span class="switch-label"></span>
+                              <span class="switch-handle"></span>
+                            </label>  
+                  </div>
+                  
+                  <div class="form-group has-danger has-feedback">
+                          <label class="form-col-form-label" for="inputError2">Mô tả </label>
+                          <textarea class="form-control" id="textarea-input" name="topicDescription" [(ngModel)]="addtopic.topicDescription" #topicDescription="ngModel" required  placeholder="Content.." rows="9"></textarea>
+                      </div>
+    
+              <div class="form-group form-actions">
+                <button class="btn btn-success" type="submit">Save changes</button>
+              </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"  (click)="modalRef.hide()" >Close</button>
+                
+              </div>
+    
+       
+    
+    
+      </div>
+
+
+   
+</ng-template>
+<ng-template #deletetopic >
+    
+  
+    
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <strong> Bạn có muốn xóa !</strong> 
+      <button type="button"  (click)="deleteTopic()" class="btn btn-info"> Xóa</button>
+      
+      <button type="button" (click)="modaldelete.hide()" class="btn btn-success">Đóng </button>
+    </div>
+    
+    
+    
+    
+
+</ng-template>
+ 
+<ng-template   #templateNested>
+
+
+
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Chỉnh sửa Topic </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef2.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div  class="modal-body">
+           
+           <div *ngIf="isprocess" class="alert alert-success">
+             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+             <strong>Loading....</strong> Xin vui lòng chờ ...
+           </div>
+           
+          <form  *ngIf="!isprocess" name="form" (ngSubmit)="f2.form.valid && editTopic()" #f2="ngForm" novalidate >
+              
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
+                  <input class="form-control" name="topicName" [(ngModel)]="edittopic.topicName" #topicName="ngModel" required placeholder="Tên topic" type="text">
+                </div>
+              </div>
+    
+              <div class="form-group has-danger has-feedback">
+                      <label class="form-col-form-label" for="inputError2">Trạng Thái </label>
+                      <label class="switch switch-default switch-pill switch-primary-outline">
+                              <input type="checkbox" name="topicStatut" [(ngModel)]="edittopic.topicStatut" #topicStatut="ngModel" class="switch-input" checked>
+                              <span class="switch-label"></span>
+                              <span class="switch-handle"></span>
+                            </label>  
+                  </div>
+                  
+                  <div class="form-group has-danger has-feedback">
+                          <label class="form-col-form-label" for="inputError2">Mô tả </label>
+                          <textarea class="form-control" id="textarea-input" name="topicDescription" [(ngModel)]="edittopic.topicDescription" #topicDescription="ngModel" required  placeholder="Content.." rows="9"></textarea>
+                      </div>
+    
+              <div class="form-group form-actions">
+                <button class="btn btn-success" type="submit">Save changes</button>
+              </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"  (click)="modalRef2.hide()">Close</button>
+                
+              </div>
+    
+       
+    
+    
+      </div>
+</ng-template>
+
+              
+
+
+
+
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Tên khóa học</th>
+                    <th>Mô tả</th>
+                    <th>Trạng thái</th>
+                    <th>Số lương </th>
+                    <th>Hành động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let temp of lists ">
+                        <td>{{ temp.topicName }}</td>
+                        <td>{{temp.topicDescription}}</td>
+                        <td>{{temp.topicStatut}}</td>
+                        <td>
+                          <span class="badge badge-success">Active</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-danger" type="button" (click)="openModalRemove(deletetopic, temp.topicID)" ><i class="fa fa-remove"></i></button>
+                            <button class="btn btn-outline-success" type="button" data-toggle="modal" (click)="openModal2(templateNested,temp.topicID )" > <i class="fa fa-edit"></i></button>
+                        </td>
+                      </tr>
+                
+                
+                </tbody>
+              </table>
+          <nav>
+            <ul class="pagination">
+              <li class="page-item"><a class="page-link" href="#">Prev</a></li>
+              <li class="page-item active">
+                <a class="page-link" href="#">1</a>
+              </li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item"><a class="page-link" href="#">4</a></li>
+              <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+    
+  </div>
